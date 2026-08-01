@@ -13,7 +13,7 @@ function App() {
     setError(null);
     setResults(null);
     try {
-      const res = await fetch('http://localhost:3001/analyze', {
+      const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resume, jobPosting })
