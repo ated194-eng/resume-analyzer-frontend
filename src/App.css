@@ -30,8 +30,6 @@ h1 {
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   margin-top: 24px;
-  align-items: center;
-  text-align: center;
 }
 
 label {
@@ -59,7 +57,7 @@ textarea:focus {
 }
 
 button {
-  align-self: center;
+  align-self: flex-start;
   background-color: #6366f1;
   color: white;
   border: none;
