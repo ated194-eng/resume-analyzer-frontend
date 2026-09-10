@@ -31,8 +31,10 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 42px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
 }
 
 button {
