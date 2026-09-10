@@ -18,9 +18,10 @@ body {
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 42px;
   font-weight: 600;
   margin-bottom: 8px;
+  text-align: center;
 }
 
 .input-section {
