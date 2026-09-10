@@ -35,25 +35,27 @@ function App() {
       <h1>Resume Analyzer</h1>
 
       <div className="input-section">
-        <label>
-          Resume
-          <textarea
-            value={resume}
-            onChange={(e) => setResume(e.target.value)}
-            rows={10}
-            placeholder="Paste your resume text here..."
-          />
-        </label>
+        <div className="textarea-row">
+          <label>
+            Resume
+            <textarea
+              value={resume}
+              onChange={(e) => setResume(e.target.value)}
+              rows={10}
+              placeholder="Paste your resume text here..."
+            />
+          </label>
 
-        <label>
-          Job Posting
-          <textarea
-            value={jobPosting}
-            onChange={(e) => setJobPosting(e.target.value)}
-            rows={10}
-            placeholder="Paste the job posting text here..."
-          />
-        </label>
+          <label>
+            Job Posting
+            <textarea
+              value={jobPosting}
+              onChange={(e) => setJobPosting(e.target.value)}
+              rows={10}
+              placeholder="Paste the job posting text here..."
+            />
+          </label>
+        </div>
 
         <button onClick={handleAnalyze} disabled={loading}>
           {loading ? 'Analyzing...' : 'Analyze'}
