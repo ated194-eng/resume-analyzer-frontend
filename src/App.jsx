@@ -41,7 +41,7 @@ function App() {
             <textarea
               value={resume}
               onChange={(e) => setResume(e.target.value)}
-              rows={10}
+              rows={16}
               placeholder="Paste your resume text here..."
             />
           </label>
@@ -51,7 +51,7 @@ function App() {
             <textarea
               value={jobPosting}
               onChange={(e) => setJobPosting(e.target.value)}
-              rows={10}
+              rows={16}
               placeholder="Paste the job posting text here..."
             />
           </label>
