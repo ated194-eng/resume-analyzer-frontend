@@ -53,8 +53,8 @@ textarea {
   border: 1px solid #ddd;
   border-radius: 8px;
   resize: both;
-  min-height: 300px;
-  min-width: 300px;
+  min-height: 400px;
+  min-width: 400px;
   transition: border-color 0.15s ease;
 }
 
