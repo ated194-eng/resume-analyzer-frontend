@@ -51,7 +51,7 @@ textarea {
   border: 1px solid #ddd;
   border-radius: 8px;
   resize: vertical;
-  min-height: 500px;
+  min-height: 300px;
   transition: border-color 0.15s ease;
 }
 
