@@ -26,7 +26,7 @@ function App() {
         formData.append('jobUrl', jobUrl);
       }
       
-      console.log('Calling:', 'https://your-render-url.onrender.com/analyze');
+      console.log('Calling:', 'https://resume-analyzer-backend-sy6a.onrender.com/analyze');
       const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/analyze', {
         method: 'POST',
         body: formData
