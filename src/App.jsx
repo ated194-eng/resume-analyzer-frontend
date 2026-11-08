@@ -7,6 +7,7 @@ function App() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [jobUrl, setJobUrl] = useState('');
 
   const handleAnalyze = async () => {
     if (!resumeFile) {
