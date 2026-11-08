@@ -2,21 +2,28 @@ import { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [resume, setResume] = useState('');
+  const [resumeFile, setResumeFile] = useState(null);
   const [jobPosting, setJobPosting] = useState('');
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleAnalyze = async () => {
+    if (!resumeFile) {
+    setError('Please attach your resume as a PDF');
+    return;
+    }
     setLoading(true);
     setError(null);
     setResults(null);
     try {
+      const formData = new FormData();
+      formData.append('resume', resumeFile);
+      formData.append('jobPosting', jobPosting);
+
       const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resume, jobPosting })
+        body: formData
       });
       const data = await res.json();
       if (!res.ok) {
@@ -37,12 +44,11 @@ function App() {
       <div className="input-section">
         <div className="textarea-row">
           <label>
-            Resume
-            <textarea
-              value={resume}
-              onChange={(e) => setResume(e.target.value)}
-              rows={16}
-              placeholder="Paste your resume text here..."
+            Resume (PDF)
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={(e) => setResumeFile(e.target.files[0])}
             />
           </label>
 
