@@ -30,10 +30,14 @@ function App() {
         method: 'POST',
         body: formData
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Something went wrong');
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error('The server returned an unexpected response. If the site was idle, wait a minute and try again.');
       }
+      if (!res.ok) throw new Error(data.error || 'Something went wrong');
       setResults(data);
     } catch (err) {
       setError(err.message);
