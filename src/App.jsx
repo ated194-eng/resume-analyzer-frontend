@@ -25,12 +25,15 @@ function App() {
       } else if (jobUrl.trim()) {
         formData.append('jobUrl', jobUrl);
       }
-
+      
+      console.log('Calling:', 'https://your-render-url.onrender.com/analyze');
       const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/analyze', {
         method: 'POST',
         body: formData
       });
       const text = await res.text();
+      console.log('Status:', res.status);
+      console.log('Response starts with:', text.slice(0, 200));
       let data;
       try {
         data = JSON.parse(text);
