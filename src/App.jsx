@@ -19,7 +19,11 @@ function App() {
     try {
       const formData = new FormData();
       formData.append('resume', resumeFile);
-      formData.append('jobPosting', jobPosting);
+      if (jobPosting.trim()) {
+        formData.append('jobPosting', jobPosting);
+      } else if (jobUrl.trim()) {
+        formData.append('jobUrl', jobUrl);
+      }
 
       const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/analyze', {
         method: 'POST',
@@ -52,6 +56,16 @@ function App() {
             />
           </label>
 
+          <label>
+            Job Posting Link
+            <input
+              type="url"
+              value={jobUrl}
+              onChange={(e) => setJobUrl(e.target.value)}
+              placeholder="https://..."
+            />
+          </label>
+          <p>Or paste the text below if the link doesn't work</p>
           <label>
             Job Posting
             <textarea
