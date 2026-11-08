@@ -44,68 +44,80 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Resume Analyzer</h1>
+      <header className="hero">
+        <h1>Find out what your resume is missing for the job</h1>
+        <p>
+          Attach your resume, add the job posting, and get the missing keywords
+          plus rewrites for your bullets.
+        </p>
+      </header>
 
-      <div className="input-section">
-        <div className="textarea-row">
-          <label>
-            Resume (PDF)
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => setResumeFile(e.target.files[0])}
-            />
-          </label>
-
-          <label>
-            Job Posting Link
-            <input
-              type="url"
-              value={jobUrl}
-              onChange={(e) => setJobUrl(e.target.value)}
-              placeholder="https://..."
-            />
-          </label>
-          <p>Or paste the text below if the link doesn't work</p>
-          <label>
-            Job Posting
-            <textarea
-              value={jobPosting}
-              onChange={(e) => setJobPosting(e.target.value)}
-              rows={16}
-              placeholder="Paste the job posting text here..."
-            />
-          </label>
+      <section className="workspace">
+        <div className="upload">
+          <p>Attach your resume as a PDF</p>
+          <input
+            className="file-input"
+            type="file"
+            accept="application/pdf"
+            onChange={(e) => setResumeFile(e.target.files[0])}
+          />
         </div>
 
+        <div className="sheet">
+          <label className="sheet-title" htmlFor="job-url">Job posting</label>
+          <input
+            id="job-url"
+            type="url"
+            value={jobUrl}
+            onChange={(e) => setJobUrl(e.target.value)}
+            placeholder="Paste a link to the posting"
+          />
+          <textarea
+            value={jobPosting}
+            onChange={(e) => setJobPosting(e.target.value)}
+            placeholder="Or paste the posting text here if the link doesn't work"
+          />
+        </div>
+      </section>
+
+      <div className="actions">
         <button onClick={handleAnalyze} disabled={loading}>
-          {loading ? 'Analyzing...' : 'Analyze'}
+          {loading ? 'Analyzing...' : 'Analyze resume'}
         </button>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error" role="alert">{error}</p>}
 
       {results && (
-        <div className="results">
-          <h2>Missing Keywords</h2>
-          <ul>
-            {results.missing_keywords.map((keyword, i) => (
-              <li key={i}>{keyword}</li>
+        <section className="results" aria-live="polite">
+          <p className="results-summary">{results.summary}</p>
+
+          <div>
+            <h2>Keywords to add</h2>
+            <ul className="keywords">
+              {results.missing_keywords.map((keyword, i) => (
+                <li key={i}>{keyword}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2>Suggested rewrites</h2>
+            {results.bullet_suggestions.map((b, i) => (
+              <div key={i} className="suggestion">
+                <p className="before">{b.original}</p>
+                <p className="after"><span>{b.improved}</span></p>
+              </div>
             ))}
-          </ul>
-
-          <h2>Bullet Suggestions</h2>
-          {results.bullet_suggestions.map((b, i) => (
-            <div key={i} className="bullet-suggestion">
-              <p><strong>Original:</strong> {b.original}</p>
-              <p><strong>Improved:</strong> {b.improved}</p>
-            </div>
-          ))}
-
-          <h2>Summary</h2>
-          <p>{results.summary}</p>
-        </div>
+          </div>
+        </section>
       )}
+
+      <footer className="footer">
+        <span>Built by Albert Tedjo</span>
+        <a href="https://github.com/ated194-eng/resume-analyzer-frontend">Frontend code</a>
+        <a href="https://github.com/ated194-eng/resume-analyzer-backend">Backend code</a>
+      </footer>
     </div>
   );
 }
