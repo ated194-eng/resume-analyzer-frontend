@@ -4,20 +4,17 @@ import './App.css';
 function App() {
   const [resumeFile, setResumeFile] = useState(null);
   const [jobPosting, setJobPosting] = useState('');
-  const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [jobUrl, setJobUrl] = useState('');
-  const [downloading, setDownloading] = useState(false);
 
-  const handleAnalyze = async () => {
+  const handleGenerate = async () => {
     if (!resumeFile) {
-    setError('Please attach your resume as a PDF');
-    return;
+      setError('Please attach your resume as a PDF');
+      return;
     }
     setLoading(true);
     setError(null);
-    setResults(null);
     try {
       const formData = new FormData();
       formData.append('resume', resumeFile);
@@ -26,45 +23,6 @@ function App() {
       } else if (jobUrl.trim()) {
         formData.append('jobUrl', jobUrl);
       }
-      
-      console.log('Calling:', 'https://resume-analyzer-backend-sy6a.onrender.com/analyze');
-      const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/analyze', {
-        method: 'POST',
-        body: formData
-      });
-      const text = await res.text();
-      console.log('Status:', res.status);
-      console.log('Response starts with:', text.slice(0, 200));
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error('The server returned an unexpected response. If the site was idle, wait a minute and try again.');
-      }
-      if (!res.ok) throw new Error(data.error || 'Something went wrong');
-      setResults(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDownload = async () => {
-    setDownloading(true);
-    setError(null);
-    try {
-      const formData = new FormData();
-      formData.append('resume', resumeFile);
-      if (jobPosting.trim()) {
-        formData.append('jobPosting', jobPosting);
-      } else if (jobUrl.trim()) {
-        formData.append('jobUrl', jobUrl);
-      }
-      formData.append('suggestions', JSON.stringify({
-        missing_keywords: results.missing_keywords,
-        bullet_suggestions: results.bullet_suggestions
-      }));
 
       const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/tailor', {
         method: 'POST',
@@ -88,17 +46,17 @@ function App() {
     } catch (err) {
       setError(err.message);
     } finally {
-      setDownloading(false);
-  }
-};
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="app">
       <header className="hero">
-        <h1>Find out what your resume is missing for the job</h1>
+        <h1>Get a version of your resume tailored to the job</h1>
         <p>
-          Attach your resume, add the job posting, and get the missing keywords
-          plus rewrites for your bullets.
+          Attach your resume and add the job posting. You'll get a one-page PDF
+          reworded for that role, using only what's already in your resume.
         </p>
       </header>
 
@@ -131,43 +89,15 @@ function App() {
       </section>
 
       <div className="actions">
-        <button onClick={handleAnalyze} disabled={loading}>
-          {loading ? 'Analyzing...' : 'Analyze resume'}
+        <button onClick={handleGenerate} disabled={loading}>
+          {loading ? 'Building your resume...' : 'Generate tailored resume'}
         </button>
+        {loading && (
+          <p className="status">This usually takes 15 to 30 seconds. The first request after a quiet period can take longer.</p>
+        )}
       </div>
 
       {error && <p className="error" role="alert">{error}</p>}
-
-      {results && (
-        <section className="results" aria-live="polite">
-          <p className="results-summary">{results.summary}</p>
-
-          <div>
-            <h2>Keywords to add</h2>
-            <ul className="keywords">
-              {results.missing_keywords.map((keyword, i) => (
-                <li key={i}>{keyword}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h2>Suggested rewrites</h2>
-            {results.bullet_suggestions.map((b, i) => (
-              <div key={i} className="suggestion">
-                <p className="before">{b.original}</p>
-                <p className="after"><span>{b.improved}</span></p>
-              </div>
-            ))}
-          </div>
-
-          <div>
-            <button onClick={handleDownload} disabled={downloading}>
-              {downloading ? 'Building PDF...' : 'Download tailored resume (PDF)'}
-            </button>
-          </div>
-        </section>
-      )}
 
       <footer className="footer">
         <span>Built by Albert Tedjo</span>

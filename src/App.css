@@ -165,24 +165,10 @@ button:disabled {
   border-left: 4px solid var(--markup-red);
 }
 
-.results {
-  display: grid;
-  gap: 40px;
-  margin-top: 56px;
-}
-
-.results-summary {
-  font-family: var(--font-doc);
-  font-size: 24px;
-  line-height: 1.45;
-  max-width: 60ch;
-  margin: 0;
-}
-
-.results h2 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 14px;
+.status {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--ink-soft);
 }
 
 .keywords {
