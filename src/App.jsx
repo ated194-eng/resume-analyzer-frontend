@@ -8,6 +8,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [jobUrl, setJobUrl] = useState('');
+  const [downloading, setDownloading] = useState(false);
 
   const handleAnalyze = async () => {
     if (!resumeFile) {
@@ -48,6 +49,44 @@ function App() {
       setLoading(false);
     }
   };
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append('resume', resumeFile);
+      if (jobPosting.trim()) {
+        formData.append('jobPosting', jobPosting);
+      } else if (jobUrl.trim()) {
+        formData.append('jobUrl', jobUrl);
+      }
+
+      const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/tailor', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        let msg = 'Could not generate the resume.';
+        try { msg = JSON.parse(text).error || msg; } catch {}
+        throw new Error(msg);
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'tailored-resume.pdf';
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setDownloading(false);
+  }
+};
 
   return (
     <div className="app">
@@ -116,6 +155,12 @@ function App() {
                 <p className="after"><span>{b.improved}</span></p>
               </div>
             ))}
+          </div>
+
+          <div>
+            <button onClick={handleDownload} disabled={downloading}>
+              {downloading ? 'Building PDF...' : 'Download tailored resume (PDF)'}
+            </button>
           </div>
         </section>
       )}
