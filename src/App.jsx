@@ -61,6 +61,10 @@ function App() {
       } else if (jobUrl.trim()) {
         formData.append('jobUrl', jobUrl);
       }
+      formData.append('suggestions', JSON.stringify({
+        missing_keywords: results.missing_keywords,
+        bullet_suggestions: results.bullet_suggestions
+      }));
 
       const res = await fetch('https://resume-analyzer-backend-sy6a.onrender.com/tailor', {
         method: 'POST',
